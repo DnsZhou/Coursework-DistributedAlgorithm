@@ -4,8 +4,8 @@ import uk.ac.ncl.TongZhou.DistrAlgori.Entity.ServerNode;
 import uk.ac.ncl.TongZhou.DistrAlgori.Entity.Tree;
 
 /**
- * @author b8027518
- *
+ * @author Tong Zhou b8027512@ncl.ac.uk
+ * @created: 9 Oct 2018 17:15:56
  */
 public class UseTreeWave {
 	public static void main(String[] args) {
