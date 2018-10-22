@@ -40,12 +40,13 @@ public class Tree {
 	}
 
 	public boolean addRelation(ServerNode fatherNode, ServerNode childrenNode) {
-		ServerNode targetNode = rootNode.findNode(fatherNode);
-		if (targetNode == null)
+		boolean hasNode;
+		hasNode = rootNode.hasNode(fatherNode);
+		if (!hasNode)
 			throw new IllegalArgumentException("Add relation failed: Could not find father node " + fatherNode);
 		else
-			targetNode.addChildren(childrenNode);
-		return targetNode != null;
+			fatherNode.addChildren(childrenNode);
+		return hasNode;
 	}
 
 
