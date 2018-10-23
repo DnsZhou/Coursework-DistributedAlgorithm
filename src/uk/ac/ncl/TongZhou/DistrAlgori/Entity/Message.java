@@ -35,7 +35,7 @@ public class Message {
 	 * @Description:
 	 * @param sender
 	 */
-	private Message(ServerNode sender) {
+	public Message(ServerNode sender) {
 		this(sender, MessageType.WAVE_MESSAGE, null);
 	}
 
@@ -45,7 +45,7 @@ public class Message {
 	 * @param sender
 	 * @param electionNode
 	 */
-	private Message(ServerNode sender, ServerNode electionNode) {
+	public Message(ServerNode sender, ServerNode electionNode) {
 		this(sender, MessageType.ELECTION_TOKEN_MESSAGE, electionNode);
 	}
 
@@ -84,5 +84,37 @@ public class Message {
 		return this.sender == msg.sender && this.electionNode == msg.electionNode
 				&& this.messagetype == msg.messagetype;
 	}
+
+	
+	/** 
+	 * Return the sender.
+	 *
+	 * @return sender 
+	 */
+	public ServerNode getSender() {
+		return sender;
+	}
+
+	
+	/** 
+	 * Return the messagetype.
+	 *
+	 * @return messagetype 
+	 */
+	public MessageType getMessagetype() {
+		return messagetype;
+	}
+
+	
+	/** 
+	 * Return the electionNode.
+	 *
+	 * @return electionNode 
+	 */
+	public ServerNode getElectionNode() {
+		return electionNode;
+	}
+	
+	
 
 }

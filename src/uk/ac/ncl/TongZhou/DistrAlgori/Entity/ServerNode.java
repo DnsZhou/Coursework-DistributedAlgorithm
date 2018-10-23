@@ -12,10 +12,12 @@ import java.util.Map;
  */
 public class ServerNode {
 	private int id;
-	private List<Message> messageQueue;
+	private LinkedList<Message> messageQueue;
 	private Map<ServerNode, Boolean> recp;
 	private ServerNode parent;
 	private List<ServerNode> children;
+	private StatusType status;
+	private ServerNode silentNeighbour;
 
 	public ServerNode(int id) {
 		this(id, null);
@@ -26,7 +28,8 @@ public class ServerNode {
 		this.parent = parent;
 		this.children = new ArrayList<ServerNode>();
 		this.recp = new HashMap<>();
-		this.messageQueue = new LinkedList<Message>();
+		this.messageQueue = new LinkedList<>();
+		this.status = StatusType.WAVE_START;
 	}
 
 	public int getId() {
@@ -79,5 +82,59 @@ public class ServerNode {
 			this.messageQueue.add(newMsg);
 			return true;
 		}
+	}
+
+	private int getFalseNodeAmountInRecp() {
+		return (int) this.recp.values().stream().filter(val -> !val).count();
+	}
+
+	/**
+	 * @Title: readMessage
+	 * @Description: Poll out one message from message queue and put it into Recp
+	 */
+	private void readMessage() {
+		Message msg = this.messageQueue.poll();
+		if (this.recp.get(msg.getSender()) != null) {
+			this.recp.put(msg.getSender(), true);
+		} else {
+			throw new IllegalStateException("Message Sender not found in Recp");
+		}
+	}
+
+	private void display(StatusType lastStatus, StatusType newStatus, ServerNode relatedNode) {
+		if (lastStatus == newStatus)
+			System.out.println(this.toString() + ": Do nothing");
+		else if (lastStatus == StatusType.WAVE_START && newStatus == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR)
+			System.out.println(this.toString() + ": Send a token to its silent neighbour: " + relatedNode.toString());
+		else if (lastStatus == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR && newStatus == StatusType.WAVE_DECIDE) {
+			System.out.println(
+					this.toString() + ": has recived a token from its silent neighbour: " + relatedNode.toString());
+			System.out.println(this.toString() + ": Decides!");
+		}
+	}
+
+	public void activate() {
+		StatusType lastStatus = this.status;
+		while (getFalseNodeAmountInRecp() > 1 && this.messageQueue.size() > 0) {
+			readMessage();
+		}
+		if (getFalseNodeAmountInRecp() <= 1 && this.status == StatusType.WAVE_START) {
+			this.silentNeighbour = this.recp.keySet().stream().filter(key -> !this.recp.get(key)).findFirst().get();
+			Message msg = new Message(this);
+			// silentNeighbour.addMessage(msg);
+			if (!this.silentNeighbour.addMessage(msg))
+				throw new IllegalStateException("failed to add message or duplicate message sent to same node");
+			this.status = StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR;
+			display(StatusType.WAVE_START, StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR, this.silentNeighbour);
+			if (this.messageQueue.size() > 0)
+				readMessage();
+		}
+		if (getFalseNodeAmountInRecp() == 0 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
+			this.status = StatusType.WAVE_DECIDE;
+			display(StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR, StatusType.WAVE_DECIDE, this.silentNeighbour);
+		}
+		if (lastStatus == this.status)
+			display(lastStatus, this.status, null);
+
 	}
 }
