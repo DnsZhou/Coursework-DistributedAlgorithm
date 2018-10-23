@@ -11,10 +11,9 @@ import java.util.Map;
 public class ServerNode{
 	private int id;
 	private Map<Integer, Boolean> recp;
-	private int load;
+	private Object data;
 	private ServerNode parent;
 	private List<ServerNode> children;
-	private List<Message> messages;
 
 	public ServerNode(int id) {
 		this.id = id;
@@ -25,12 +24,36 @@ public class ServerNode{
 		return id;
 	}
 	
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
+
 	public ServerNode getParent() {
 		return parent;
 	}
 
+	public void setParent(ServerNode parent) {
+		this.parent = parent;
+	}
+
 	public List<ServerNode> getChildren() {
 		return children;
+	}
+
+	public void setChildren(List<ServerNode> children) {
+		this.children = children;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setRecp(Map<Integer, Boolean> recp) {
+		this.recp = recp;
 	}
 
 	@Override
@@ -50,15 +73,17 @@ public class ServerNode{
 			return false;
 	}
 
-	public boolean hasNode(ServerNode targetNode) {
+	public ServerNode findNode(ServerNode targetNode) {
+		ServerNode tempNode;
 		if (this == targetNode)
-			return true;
+			return this;
 		else
 			for (ServerNode child : children) {
-				if (child.hasNode(targetNode))
-					return true;
+				tempNode = child.findNode(targetNode);
+				if (tempNode != null)
+					return tempNode;
 			}
-		return false;
+		return null;
 	}
 
 	public boolean hasChild() {
@@ -66,15 +91,10 @@ public class ServerNode{
 	}
 
 	public void addChildren(ServerNode child) {
-		this.children.add(child);
-		child.parent = this;
+		this.getChildren().add(child);
 	}
 	
-	public void initialRecp() {
+	public void refreshRecp() {
 
-	}
-
-	public int getLoad() {
-		return load;
 	}
 }
