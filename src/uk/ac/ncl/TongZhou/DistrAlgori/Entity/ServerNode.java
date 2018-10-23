@@ -1,6 +1,8 @@
 package uk.ac.ncl.TongZhou.DistrAlgori.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,52 +10,35 @@ import java.util.Map;
  * @author Tong Zhou b8027512@ncl.ac.uk
  * @created: 9 Oct 2018 17:15:56
  */
-public class ServerNode{
+public class ServerNode {
 	private int id;
-	private Map<Integer, Boolean> recp;
-	private Object data;
+	private List<Message> messageQueue;
+	private Map<ServerNode, Boolean> recp;
 	private ServerNode parent;
 	private List<ServerNode> children;
 
 	public ServerNode(int id) {
+		this(id, null);
+	}
+
+	public ServerNode(int id, ServerNode parent) {
 		this.id = id;
+		this.parent = parent;
 		this.children = new ArrayList<ServerNode>();
+		this.recp = new HashMap<>();
+		this.messageQueue = new LinkedList<Message>();
 	}
 
 	public int getId() {
 		return id;
-	}
-	
-	public Object getData() {
-		return data;
-	}
-
-	public void setData(Object data) {
-		this.data = data;
 	}
 
 	public ServerNode getParent() {
 		return parent;
 	}
 
-	public void setParent(ServerNode parent) {
-		this.parent = parent;
-	}
-
 	public List<ServerNode> getChildren() {
 		return children;
-	}
-
-	public void setChildren(List<ServerNode> children) {
-		this.children = children;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setRecp(Map<Integer, Boolean> recp) {
-		this.recp = recp;
 	}
 
 	@Override
@@ -61,29 +46,15 @@ public class ServerNode{
 		return "ServerNode [id=" + id + "]";
 	}
 
-	public Map<Integer, Boolean> getRecp() {
-		return recp;
-	}
-
-	public boolean addToRecp(Integer serverId, Boolean value) {
-		if (this.getRecp().get(serverId) != null) {
-			this.getRecp().put(serverId, value);
-			return true;
-		} else
-			return false;
-	}
-
-	public ServerNode findNode(ServerNode targetNode) {
-		ServerNode tempNode;
+	public boolean hasNode(ServerNode targetNode) {
 		if (this == targetNode)
-			return this;
+			return true;
 		else
 			for (ServerNode child : children) {
-				tempNode = child.findNode(targetNode);
-				if (tempNode != null)
-					return tempNode;
+				if (child.hasNode(targetNode))
+					return true;
 			}
-		return null;
+		return false;
 	}
 
 	public boolean hasChild() {
@@ -91,10 +62,22 @@ public class ServerNode{
 	}
 
 	public void addChildren(ServerNode child) {
-		this.getChildren().add(child);
+		this.children.add(child);
+		child.parent = this;
 	}
-	
-	public void refreshRecp() {
 
+	public void initializeRecp() {
+		if (this.parent != null)
+			this.recp.put(parent, false);
+		children.forEach(child -> this.recp.put(child, false));
+	}
+
+	public boolean addMessage(Message newMsg) {
+		if (newMsg == null || messageQueue.stream().anyMatch(msg -> (msg != null && msg.equals(newMsg))))
+			return false;
+		else {
+			this.messageQueue.add(newMsg);
+			return true;
+		}
 	}
 }
