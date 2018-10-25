@@ -4,17 +4,17 @@
  * @author: Tong Zhou b8027512@ncl.ac.uk
  * @created: 05:10 23-10-2018
  */
-package uk.ac.ncl.TongZhou.DistrAlgori.wavealgorithm;
+package uk.ac.ncl.tongzhou.distralgori.usealgorithm;
 
-import uk.ac.ncl.TongZhou.DistrAlgori.Entity.ServerNode;
-import uk.ac.ncl.TongZhou.DistrAlgori.Entity.Tree;
+import uk.ac.ncl.tongzhou.distralgori.entity.ServerNode;
+import uk.ac.ncl.tongzhou.distralgori.entity.Tree;
 
 /**
  * @ClassName: SetupWaveAlgorithm
  * @Description:
  * 
  */
-public class SetupWaveAlgorithm {
+public class SetupTree {
 
 	static public Tree setUpBalancedBinaryTree() {
 		ServerNode server0 = new ServerNode(0);
@@ -40,7 +40,6 @@ public class SetupWaveAlgorithm {
 
 		System.out.println("¡þ¡þ¡þBalancedBinaryTree generated as follow:");
 		waveTree.printTree();
-
 		return waveTree;
 	}
 

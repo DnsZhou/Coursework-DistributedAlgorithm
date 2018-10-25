@@ -1,10 +1,11 @@
-package uk.ac.ncl.TongZhou.DistrAlgori.Entity;
+package uk.ac.ncl.tongzhou.distralgori.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Tong Zhou b8027512@ncl.ac.uk
@@ -88,6 +89,10 @@ public class ServerNode {
 		return (int) this.recp.values().stream().filter(val -> !val).count();
 	}
 
+	private ServerNode getFirstFalseNodesInRecp() {
+		return this.recp.keySet().stream().filter(key -> (this.recp.get(key) == false)).findFirst().get();
+	}
+
 	/**
 	 * @Title: readMessage
 	 * @Description: Poll out one message from message queue and put it into Recp
@@ -113,15 +118,19 @@ public class ServerNode {
 		}
 	}
 
-	public void activate() {
+	public void activateWaveAlgorithm() {
 		StatusType lastStatus = this.status;
-		while (getFalseNodeAmountInRecp() > 1 && this.messageQueue.size() > 0) {
+		while (getFalseNodeAmountInRecp() >= 1 && this.messageQueue.size() > 0) {
+			if (getFalseNodeAmountInRecp() == 1) {
+				ServerNode falseNode = getFirstFalseNodesInRecp();
+				this.silentNeighbour = falseNode;
+			}
 			readMessage();
 		}
 		if (getFalseNodeAmountInRecp() <= 1 && this.status == StatusType.WAVE_START) {
-			this.silentNeighbour = this.recp.keySet().stream().filter(key -> !this.recp.get(key)).findFirst().get();
+			this.silentNeighbour = this.silentNeighbour != null ? this.silentNeighbour
+					: this.recp.keySet().stream().filter(key -> !this.recp.get(key)).findFirst().get();
 			Message msg = new Message(this);
-			// silentNeighbour.addMessage(msg);
 			if (!this.silentNeighbour.addMessage(msg))
 				throw new IllegalStateException("failed to add message or duplicate message sent to same node");
 			this.status = StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR;
@@ -132,9 +141,20 @@ public class ServerNode {
 		if (getFalseNodeAmountInRecp() == 0 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
 			this.status = StatusType.WAVE_DECIDE;
 			display(StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR, StatusType.WAVE_DECIDE, this.silentNeighbour);
+			// Message msg = new Message(this);
+			// if (!this.silentNeighbour.addMessage(msg))
+			// throw new IllegalStateException("failed to add message or duplicate message
+			// sent to same node");
+		}
+		if (getFalseNodeAmountInRecp() == 1 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
+
 		}
 		if (lastStatus == this.status)
 			display(lastStatus, this.status, null);
 
+	}
+	
+	public void activateElectionAlgorithm() {
+		
 	}
 }

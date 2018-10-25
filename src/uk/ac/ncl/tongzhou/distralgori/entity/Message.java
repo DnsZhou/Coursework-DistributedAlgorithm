@@ -1,14 +1,14 @@
 
 /**
- * @Description: 
- * @author: Tong Zhou b8027512@ncl.ac.uk
- * @created: 03:08 23-10-2018
+ * @Description 
+ * @author Tong Zhou b8027512@ncl.ac.uk
+ * @created 03:08 23-10-2018
  */
-package uk.ac.ncl.TongZhou.DistrAlgori.Entity;
+package uk.ac.ncl.tongzhou.distralgori.entity;
 
 /**
- * @ClassName: Message
- * @Description:
+ * @ClassName Message
+ * @Description
  * 
  */
 public class Message {
@@ -17,8 +17,8 @@ public class Message {
 	private ServerNode electionNode;
 
 	/**
-	 * @Title: Constructor for Message
-	 * @Description:
+	 * @Title Constructor for Message
+	 * @Description
 	 * @param sender
 	 * @param messagetype
 	 * @param electionNode
@@ -31,17 +31,28 @@ public class Message {
 	}
 
 	/**
-	 * @Title: Constructor for WAVE_MESSAGE
-	 * @Description:
+	 * @Title Constructor for WAVE_MESSAGE
+	 * @Description
 	 * @param sender
 	 */
 	public Message(ServerNode sender) {
 		this(sender, MessageType.WAVE_MESSAGE, null);
 	}
+	
+	
+	/**   
+	 * @Title Constructor for ELECTION_WAKEUP_MESSAGE  
+	 * @Description 
+	 * @param sender
+	 * @param messageType 
+	 */  
+	public Message(ServerNode sender, MessageType messageType) {
+		this(sender, messageType, null);
+	}
 
 	/**
-	 * @Title: Constructor for ELECTION_TOKEN_MESSAGE
-	 * @Description:
+	 * @Title Constructor for ELECTION_TOKEN_MESSAGE
+	 * @Description
 	 * @param sender
 	 * @param electionNode
 	 */
@@ -50,8 +61,8 @@ public class Message {
 	}
 
 	/**
-	 * @Title: toString
-	 * @Description:
+	 * @Title toString
+	 * @Description
 	 * @return
 	 * @see java.lang.Object#toString()
 	 */

@@ -1,4 +1,4 @@
-package uk.ac.ncl.TongZhou.DistrAlgori.Entity;
+package uk.ac.ncl.tongzhou.distralgori.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class Tree {
 			} while (duplicateFlag);
 			randServers.add(this.findNodeById(randServerId));
 		}
-		randServers.forEach(ServerNode::activate);
+		randServers.forEach(ServerNode::activateWaveAlgorithm);
 	}
 
 	private ServerNode findNodeById(final int id) {
