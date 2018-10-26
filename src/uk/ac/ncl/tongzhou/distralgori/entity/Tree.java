@@ -104,7 +104,7 @@ public class Tree {
 
 	public void iterateActivateRandomNodes(int iteratetimes) {
 		for (int i = 1; i <= iteratetimes; i++) {
-			System.out.print("¡þ¡þ¡þIteration " + i + " Start, ");
+			System.out.print("====Iteration " + i + " Start, ");
 			activateRandomNodes();
 			System.out.println();
 		}
@@ -114,7 +114,7 @@ public class Tree {
 
 	public void iterateActivateRandomNodesForElection(int iteratetimes) {
 		for (int i = 1; i <= iteratetimes; i++) {
-			System.out.print("¡þ¡þ¡þIteration " + i + " Start, ");
+			System.out.print("====Iteration " + i + " Start, ");
 			activateRandomNodes(i == 1);
 			System.out.println();
 		}
