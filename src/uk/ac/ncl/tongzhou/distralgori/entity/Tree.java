@@ -10,20 +10,20 @@ import java.util.stream.Collectors;
  * @created: 9 Oct 2018 17:15:56
  */
 public class Tree {
-	private ServerNode rootNode;
-	private List<ServerNode> allNodes;
+	private WaveNode rootNode;
+	private List<WaveNode> allNodes;
 
-	public Tree(ServerNode rootNodeServer) {
+	public Tree(WaveNode rootNodeServer) {
 		allNodes = new ArrayList<>();
 		rootNode = rootNodeServer;
 		allNodes.add(rootNode);
 	}
 
-	public ServerNode getRootNode() {
+	public WaveNode getRootNode() {
 		return rootNode;
 	}
 
-	public void setRootNode(ServerNode rootNode) {
+	public void setRootNode(WaveNode rootNode) {
 		this.rootNode = rootNode;
 	}
 
@@ -32,7 +32,7 @@ public class Tree {
 		System.out.println();
 	}
 
-	private static void printTree(ServerNode node, int iteration) {
+	private static void printTree(WaveNode node, int iteration) {
 		for (int i = 0; i < iteration; i++) {
 			System.out.print("  |");
 		}
@@ -42,13 +42,13 @@ public class Tree {
 		System.out.print(node + "\n");
 		if (node.hasChild()) {
 			iteration++;
-			for (ServerNode child : node.getChildren()) {
+			for (WaveNode child : node.getChildren()) {
 				printTree(child, iteration);
 			}
 		}
 	}
 
-	public boolean addRelation(ServerNode fatherNode, ServerNode childNode) {
+	public boolean addRelation(WaveNode fatherNode, WaveNode childNode) {
 		boolean hasNode;
 		hasNode = rootNode.hasNode(fatherNode);
 		if (!hasNode)
@@ -66,10 +66,18 @@ public class Tree {
 	 *               nodes to excute the algorithm
 	 */
 	public void activateRandomNodes() {
+		activateRandomNodes(false);
+	}
+
+	public void activateRandomNodes(boolean isInitiator) {
 		Random amountRandom = new Random();
 		int randServerAmount = amountRandom.nextInt(allNodes.size()) + 1;
-		System.out.println(randServerAmount+" Nodes to be activate");
-		List<ServerNode> randServers = new ArrayList<>();
+		if (isInitiator)
+			System.out.println(randServerAmount + " Nodes selected as initiator.");
+		else
+			System.out.println(randServerAmount + " Nodes to be activate.");
+
+		List<WaveNode> randServers = new ArrayList<>();
 		for (; randServerAmount > 0; randServerAmount--) {
 			Random serverIdRandom = new Random();
 			int randServerId;
@@ -84,10 +92,13 @@ public class Tree {
 			} while (duplicateFlag);
 			randServers.add(this.findNodeById(randServerId));
 		}
-		randServers.forEach(ServerNode::activateWaveAlgorithm);
+		if (isInitiator)
+			randServers.forEach(node -> ((ElectionNode) node).activate(true));
+		else
+			randServers.forEach(WaveNode::activate);
 	}
 
-	private ServerNode findNodeById(final int id) {
+	private WaveNode findNodeById(final int id) {
 		return allNodes.stream().filter(node -> node.getId() == id).findFirst().get();
 	}
 
@@ -100,7 +111,17 @@ public class Tree {
 		System.out.println("\n");
 
 	}
-	
+
+	public void iterateActivateRandomNodesForElection(int iteratetimes) {
+		for (int i = 1; i <= iteratetimes; i++) {
+			System.out.print("¡þ¡þ¡þIteration " + i + " Start, ");
+			activateRandomNodes(i == 1);
+			System.out.println();
+		}
+		System.out.println("\n");
+
+	}
+
 	public void initializeTree() {
 		allNodes.forEach(node -> node.initializeRecp());
 	}

@@ -12,9 +12,9 @@ package uk.ac.ncl.tongzhou.distralgori.entity;
  * 
  */
 public class Message {
-	private ServerNode sender;
+	private WaveNode sender;
 	private MessageType messagetype;
-	private ServerNode electionNode;
+	private WaveNode electionNode;
 
 	/**
 	 * @Title Constructor for Message
@@ -23,7 +23,7 @@ public class Message {
 	 * @param messagetype
 	 * @param electionNode
 	 */
-	private Message(ServerNode sender, MessageType messagetype, ServerNode electionNode) {
+	public Message(WaveNode sender, MessageType messagetype, WaveNode electionNode) {
 		super();
 		this.sender = sender;
 		this.messagetype = messagetype;
@@ -35,7 +35,7 @@ public class Message {
 	 * @Description
 	 * @param sender
 	 */
-	public Message(ServerNode sender) {
+	public Message(WaveNode sender) {
 		this(sender, MessageType.WAVE_MESSAGE, null);
 	}
 	
@@ -46,7 +46,7 @@ public class Message {
 	 * @param sender
 	 * @param messageType 
 	 */  
-	public Message(ServerNode sender, MessageType messageType) {
+	public Message(WaveNode sender, MessageType messageType) {
 		this(sender, messageType, null);
 	}
 
@@ -56,7 +56,7 @@ public class Message {
 	 * @param sender
 	 * @param electionNode
 	 */
-	public Message(ServerNode sender, ServerNode electionNode) {
+	public Message(WaveNode sender, WaveNode electionNode) {
 		this(sender, MessageType.ELECTION_TOKEN_MESSAGE, electionNode);
 	}
 
@@ -102,7 +102,7 @@ public class Message {
 	 *
 	 * @return sender 
 	 */
-	public ServerNode getSender() {
+	public WaveNode getSender() {
 		return sender;
 	}
 
@@ -122,7 +122,7 @@ public class Message {
 	 *
 	 * @return electionNode 
 	 */
-	public ServerNode getElectionNode() {
+	public WaveNode getElectionNode() {
 		return electionNode;
 	}
 	

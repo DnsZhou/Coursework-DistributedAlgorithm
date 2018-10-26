@@ -11,23 +11,23 @@ import java.util.stream.Collectors;
  * @author Tong Zhou b8027512@ncl.ac.uk
  * @created: 9 Oct 2018 17:15:56
  */
-public class ServerNode {
+public class WaveNode {
 	private int id;
-	private LinkedList<Message> messageQueue;
-	private Map<ServerNode, Boolean> recp;
-	private ServerNode parent;
-	private List<ServerNode> children;
-	private StatusType status;
-	private ServerNode silentNeighbour;
+	protected LinkedList<Message> messageQueue;
+	protected Map<WaveNode, Boolean> recp;
+	protected WaveNode parent;
+	protected List<WaveNode> children;
+	protected StatusType status;
+	protected WaveNode silentNeighbour;
 
-	public ServerNode(int id) {
+	public WaveNode(int id) {
 		this(id, null);
 	}
 
-	public ServerNode(int id, ServerNode parent) {
+	public WaveNode(int id, WaveNode parent) {
 		this.id = id;
 		this.parent = parent;
-		this.children = new ArrayList<ServerNode>();
+		this.children = new ArrayList<WaveNode>();
 		this.recp = new HashMap<>();
 		this.messageQueue = new LinkedList<>();
 		this.status = StatusType.WAVE_START;
@@ -37,11 +37,11 @@ public class ServerNode {
 		return id;
 	}
 
-	public ServerNode getParent() {
+	public WaveNode getParent() {
 		return parent;
 	}
 
-	public List<ServerNode> getChildren() {
+	public List<WaveNode> getChildren() {
 		return children;
 	}
 
@@ -50,11 +50,11 @@ public class ServerNode {
 		return "ServerNode [id=" + id + "]";
 	}
 
-	public boolean hasNode(ServerNode targetNode) {
+	public boolean hasNode(WaveNode targetNode) {
 		if (this == targetNode)
 			return true;
 		else
-			for (ServerNode child : children) {
+			for (WaveNode child : children) {
 				if (child.hasNode(targetNode))
 					return true;
 			}
@@ -65,7 +65,7 @@ public class ServerNode {
 		return this.children != null && this.children.size() > 0;
 	}
 
-	public void addChildren(ServerNode child) {
+	public void addChildren(WaveNode child) {
 		this.children.add(child);
 		child.parent = this;
 	}
@@ -85,11 +85,11 @@ public class ServerNode {
 		}
 	}
 
-	private int getFalseNodeAmountInRecp() {
+	protected int getFalseNodeAmountInRecp() {
 		return (int) this.recp.values().stream().filter(val -> !val).count();
 	}
 
-	private ServerNode getFirstFalseNodesInRecp() {
+	protected WaveNode getFirstFalseNodesInRecp() {
 		return this.recp.keySet().stream().filter(key -> (this.recp.get(key) == false)).findFirst().get();
 	}
 
@@ -106,7 +106,7 @@ public class ServerNode {
 		}
 	}
 
-	private void display(StatusType lastStatus, StatusType newStatus, ServerNode relatedNode) {
+	private void display(StatusType lastStatus, StatusType newStatus, WaveNode relatedNode) {
 		if (lastStatus == newStatus)
 			System.out.println(this.toString() + ": Do nothing");
 		else if (lastStatus == StatusType.WAVE_START && newStatus == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR)
@@ -118,11 +118,11 @@ public class ServerNode {
 		}
 	}
 
-	public void activateWaveAlgorithm() {
+	public void activate() {
 		StatusType lastStatus = this.status;
 		while (getFalseNodeAmountInRecp() >= 1 && this.messageQueue.size() > 0) {
 			if (getFalseNodeAmountInRecp() == 1) {
-				ServerNode falseNode = getFirstFalseNodesInRecp();
+				WaveNode falseNode = getFirstFalseNodesInRecp();
 				this.silentNeighbour = falseNode;
 			}
 			readMessage();
@@ -141,10 +141,6 @@ public class ServerNode {
 		if (getFalseNodeAmountInRecp() == 0 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
 			this.status = StatusType.WAVE_DECIDE;
 			display(StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR, StatusType.WAVE_DECIDE, this.silentNeighbour);
-			// Message msg = new Message(this);
-			// if (!this.silentNeighbour.addMessage(msg))
-			// throw new IllegalStateException("failed to add message or duplicate message
-			// sent to same node");
 		}
 		if (getFalseNodeAmountInRecp() == 1 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
 
@@ -152,9 +148,5 @@ public class ServerNode {
 		if (lastStatus == this.status)
 			display(lastStatus, this.status, null);
 
-	}
-	
-	public void activateElectionAlgorithm() {
-		
 	}
 }

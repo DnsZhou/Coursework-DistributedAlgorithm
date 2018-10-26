@@ -8,14 +8,14 @@ import uk.ac.ncl.tongzhou.distralgori.entity.Tree;
  */
 public class UseWaveAlgorithm {
 	public static void main(String[] args) {
-		Tree balanceTree = SetupTree.setUpBalancedBinaryTree();
-		balanceTree.iterateActivateRandomNodes(10);
+		Tree balanceTree = SetupTree.setUpBalancedBinaryTreeForWave();
+		balanceTree.iterateActivateRandomNodes(100);
 
-		 Tree unbalanceTree = SetupTree.setUpUnbalancedBinaryTree();
-		 unbalanceTree.iterateActivateRandomNodes(10);
+		 Tree unbalanceTree = SetupTree.setUpUnbalancedBinaryTreeForWave();
+		 unbalanceTree.iterateActivateRandomNodes(100);
 		
-		 Tree arbitraryTree = SetupTree.setUpArbitraryTree();
-		 arbitraryTree.iterateActivateRandomNodes(10);
+		 Tree arbitraryTree = SetupTree.setUpArbitraryTreeForWave();
+		 arbitraryTree.iterateActivateRandomNodes(100);
 
 	}
 

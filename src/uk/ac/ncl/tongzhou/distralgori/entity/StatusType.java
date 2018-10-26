@@ -6,12 +6,12 @@
  */
 package uk.ac.ncl.tongzhou.distralgori.entity;
 
-
 /**
- * @ClassName: StatusType 
- * @Description: 
+ * @ClassName: StatusType
+ * @Description:
  * 
  */
 public enum StatusType {
-	WAVE_START, WAVE_SENT_TO_SILENT_NEIGHBOUR, WAVE_DECIDE
+	WAVE_START, WAVE_SENT_TO_SILENT_NEIGHBOUR, WAVE_DECIDE, 
+	ELECTION_SLEEP, ELECTION_WAKEUP, ELECTION_SENT_TO_SILENT_NEIGHBOUR, ELECTION_LEADER, ELECTION_LOST
 }
