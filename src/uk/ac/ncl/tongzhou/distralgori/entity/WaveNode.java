@@ -95,7 +95,8 @@ public class WaveNode {
 
 	/**
 	 * @Title: readMessage
-	 * @Description: Poll out one message from message queue and put it into Recp
+	 * @Description: Poll out one message from message queue and put it into
+	 *               Recp
 	 */
 	private void readMessage() {
 		Message msg = this.messageQueue.poll();
@@ -141,9 +142,6 @@ public class WaveNode {
 		if (getFalseNodeAmountInRecp() == 0 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
 			this.status = StatusType.WAVE_DECIDE;
 			display(StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR, StatusType.WAVE_DECIDE, this.silentNeighbour);
-		}
-		if (getFalseNodeAmountInRecp() == 1 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
-
 		}
 		if (lastStatus == this.status)
 			display(lastStatus, this.status, null);
