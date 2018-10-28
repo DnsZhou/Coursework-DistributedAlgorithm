@@ -142,9 +142,6 @@ public class WaveNode {
 			this.status = StatusType.WAVE_DECIDE;
 			display(StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR, StatusType.WAVE_DECIDE, this.silentNeighbour);
 		}
-		if (getFalseNodeAmountInRecp() == 1 && this.status == StatusType.WAVE_SENT_TO_SILENT_NEIGHBOUR) {
-
-		}
 		if (lastStatus == this.status)
 			display(lastStatus, this.status, null);
 

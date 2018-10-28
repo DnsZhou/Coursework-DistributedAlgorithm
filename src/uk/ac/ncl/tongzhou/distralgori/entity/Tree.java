@@ -72,13 +72,9 @@ public class Tree {
 	public void activateRandomNodes(boolean isInitiator) {
 		Random amountRandom = new Random();
 		int randServerAmount = amountRandom.nextInt(allNodes.size()) + 1;
-		if (isInitiator)
-			System.out.println(randServerAmount + " Nodes selected as initiator.");
-		else
-			System.out.println(randServerAmount + " Nodes to be activate.");
 
 		List<WaveNode> randServers = new ArrayList<>();
-		for (; randServerAmount > 0; randServerAmount--) {
+		for (int i = 0; i < randServerAmount; i++) {
 			Random serverIdRandom = new Random();
 			int randServerId;
 			boolean duplicateFlag;
@@ -92,34 +88,53 @@ public class Tree {
 			} while (duplicateFlag);
 			randServers.add(this.findNodeById(randServerId));
 		}
-		if (isInitiator)
+		if (isInitiator) {
+			System.out.print(randServerAmount + " Nodes selected as initiator: ");
+			randServers.forEach(node -> System.out.print(node.getId() + ", "));
+			System.out.print("\n");
 			randServers.forEach(node -> ((ElectionNode) node).activate(true));
-		else
+		}
+
+		else {
+			System.out.print(randServerAmount + " Nodes to be activated: ");
+			randServers.forEach(node -> System.out.print(node.getId() + ", "));
+			System.out.print("\n");
 			randServers.forEach(WaveNode::activate);
+		}
 	}
 
 	private WaveNode findNodeById(final int id) {
 		return allNodes.stream().filter(node -> node.getId() == id).findFirst().get();
 	}
 
-	public void iterateActivateRandomNodes(int iteratetimes) {
+	public int iterateActivateRandomNodes(int iteratetimes) {
 		for (int i = 1; i <= iteratetimes; i++) {
-			System.out.print("¡þ¡þ¡þIteration " + i + " Start, ");
+			System.out.print("====Iteration " + i + " Start, ");
 			activateRandomNodes();
 			System.out.println();
+			if (this.allNodes.stream().filter(node -> node.status == StatusType.WAVE_DECIDE).count() == 2) {
+				System.out.println("Algorithm finished.\n");
+				return i;
+			}
 		}
 		System.out.println("\n");
-
+		return 0;
 	}
 
-	public void iterateActivateRandomNodesForElection(int iteratetimes) {
+	public int iterateActivateRandomNodesForElection(int iteratetimes) {
 		for (int i = 1; i <= iteratetimes; i++) {
-			System.out.print("¡þ¡þ¡þIteration " + i + " Start, ");
+			System.out.print("====Iteration " + i + " Start, ");
 			activateRandomNodes(i == 1);
 			System.out.println();
+			if (this.allNodes.stream().filter(
+					node -> node.status == StatusType.ELECTION_LEADER || node.status == StatusType.ELECTION_LOST)
+					.count() == this.allNodes.size()) {
+				System.out.println("Algorithm finished.\n");
+				return i;
+			}
 		}
 		System.out.println("\n");
-
+		return 0;
 	}
 
 	public void initializeTree() {

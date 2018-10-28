@@ -15,6 +15,7 @@ import uk.ac.ncl.tongzhou.distralgori.entity.Tree;
  */
 public class UseElectionAlgorithm {
 	public static void main(String[] args) {
+		System.out.println("========Start Election Algorithm");
 		Tree balanceTree = SetupTree.setUpBalancedBinaryTreeForElection();
 		balanceTree.iterateActivateRandomNodesForElection(100);
 
