@@ -39,7 +39,7 @@ public class SetupTree {
 		waveTree.addRelation(server5, server8);
 		waveTree.initializeTree();
 
-		System.out.println("====BalancedBinaryTree generated as follow:");
+		System.out.println("¡þ¡þ¡þBalancedBinaryTree generated as follow:");
 		waveTree.printTree();
 		return waveTree;
 	}
@@ -66,7 +66,7 @@ public class SetupTree {
 		waveTree.addRelation(server7, server8);
 		waveTree.initializeTree();
 
-		System.out.println("====UnbalancedBinaryTree generated as follow:");
+		System.out.println("¡þ¡þ¡þUnbalancedBinaryTree generated as follow:");
 		waveTree.printTree();
 
 		return waveTree;
@@ -94,7 +94,7 @@ public class SetupTree {
 		waveTree.addRelation(server0, server8);
 		waveTree.initializeTree();
 
-		System.out.println("====ArbitraryTree generated as follow:");
+		System.out.println("¡þ¡þ¡þArbitraryTree generated as follow:");
 		waveTree.printTree();
 
 		return waveTree;
@@ -121,7 +121,7 @@ public class SetupTree {
 		waveTree.addRelation(server5, server8);
 		waveTree.initializeTree();
 		
-		System.out.println("====BalancedBinaryTree generated as follow:");
+		System.out.println("¡þ¡þ¡þBalancedBinaryTree generated as follow:");
 		waveTree.printTree();
 		return waveTree;
 	}
@@ -148,7 +148,7 @@ public class SetupTree {
 		waveTree.addRelation(server7, server8);
 		waveTree.initializeTree();
 		
-		System.out.println("====UnbalancedBinaryTree generated as follow:");
+		System.out.println("¡þ¡þ¡þUnbalancedBinaryTree generated as follow:");
 		waveTree.printTree();
 		
 		return waveTree;
@@ -176,7 +176,7 @@ public class SetupTree {
 		waveTree.addRelation(server0, server8);
 		waveTree.initializeTree();
 		
-		System.out.println("====ArbitraryTree generated as follow:");
+		System.out.println("¡þ¡þ¡þArbitraryTree generated as follow:");
 		waveTree.printTree();
 		
 		return waveTree;
