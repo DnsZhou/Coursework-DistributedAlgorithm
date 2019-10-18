@@ -69,37 +69,38 @@ public class Tree {
 		activateRandomNodes(false);
 	}
 
-	public void activateRandomNodes(boolean isInitiator) {
+	public void activateRandomNodes(boolean isInitiator) {//isInitiator参数控制当前激活的是否是起始节点
 		Random amountRandom = new Random();
-		int randServerAmount = amountRandom.nextInt(allNodes.size()) + 1;
+		int randServerAmount = amountRandom.nextInt(allNodes.size()) + 1; //randServerAmount 是设置随机激活几个节点
 
-		List<WaveNode> randServers = new ArrayList<>();
-		for (int i = 0; i < randServerAmount; i++) {
-			Random serverIdRandom = new Random();
-			int randServerId;
-			boolean duplicateFlag;
+		List<WaveNode> randServers = new ArrayList<>(); //创建实体列表
+		for (int i = 0; i < randServerAmount; i++) { //根据随机激活节点数进行对应次数的迭代
+			Random serverIdRandom = new Random(); //新建随机数，选择激活对应节点
+			int randServerId; 
+			boolean duplicateFlag; //重复标识flag，如果节点已经被激活过就跳过并重新再选一个节点
 			do {
 				duplicateFlag = false;
-				randServerId = serverIdRandom.nextInt(allNodes.size());
+				randServerId = serverIdRandom.nextInt(allNodes.size()); //根据当前总的节点数生成随机ID
 				for (int id : randServers.stream().map(serverNode -> serverNode.getId()).collect(Collectors.toList())) {
+				//用lambda表达式将选中的节点转换为节点ID的list
 					if (randServerId == id)
 						duplicateFlag = true;
 				}
 			} while (duplicateFlag);
-			randServers.add(this.findNodeById(randServerId));
+			randServers.add(this.findNodeById(randServerId)); //将节点ID转换为节点储存进随机节点list
 		}
-		if (isInitiator) {
+		if (isInitiator) {//初始节点操作
 			System.out.print(randServerAmount + " Nodes selected as initiator: ");
 			randServers.forEach(node -> System.out.print(node.getId() + ", "));
 			System.out.print("\n");
-			randServers.forEach(node -> ((ElectionNode) node).activate(true));
+			randServers.forEach(node -> ((ElectionNode) node).activate(true));//对每一个节点，进行initiator版本的激活操作
 		}
 
 		else {
 			System.out.print(randServerAmount + " Nodes to be activated: ");
 			randServers.forEach(node -> System.out.print(node.getId() + ", "));
 			System.out.print("\n");
-			randServers.forEach(WaveNode::activate);
+			randServers.forEach(WaveNode::activate);//对每一个节点，进行非initiator的激活操作
 		}
 	}
 
